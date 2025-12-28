@@ -1,17 +1,21 @@
-import type { AnyCircuitElement } from "circuit-json"
+import type { AnyCircuitElement, Length } from "circuit-json"
 import { BasePipelineSolver } from "@tscircuit/solver-utils"
 import type { PipelineStep } from "@tscircuit/solver-utils"
 
 export type SolverInput = AnyCircuitElement[]
 
-export interface SolvedAnchorDimensions {
-  [circuitJsonElementId: string]: {
-    horizontal_offset: number
-    vertical_offset: number
+export interface CreatedDimension {
+  /** The two points on the PCB being dimensioned */
+  from: { x: number; y: number }
+  to: { x: number; y: number }
+  offset_distance?: Length
+  offset_direction?: {
+    x: number
+    y: number
   }
 }
 
-export type SolverOutput = SolvedAnchorDimensions
+export type SolverOutput = CreatedDimension[]
 
 export class DimensionPlacementSolver extends BasePipelineSolver<SolverInput> {
   pipelineDef: PipelineStep<any>[] = []
@@ -22,6 +26,6 @@ export class DimensionPlacementSolver extends BasePipelineSolver<SolverInput> {
 
   override getOutput(): SolverOutput {
     // TODO.
-    return {}
+    return []
   }
 }
