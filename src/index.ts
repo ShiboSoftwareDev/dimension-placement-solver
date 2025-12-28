@@ -4,14 +4,24 @@ import type { PipelineStep } from "@tscircuit/solver-utils"
 
 export type SolverInput = AnyCircuitElement[]
 
-export interface SolvedAnchorDimensions {
-  [circuitJsonElementId: string]: {
-    horizontal_offset: number
-    vertical_offset: number
-  }
+export interface CreatedDimension {
+  /** The two points on the PCB being dimensioned */
+  from: { x: number; y: number }
+  to: { x: number; y: number }
+  /** The axis the dimension is measuring */
+  axis: "x" | "y"
+  /**
+   * The distance from the furthest point to the dimension line.
+   *
+   * If axis is "x", this is the y-distance from the top-most point to the
+   * dimension line.
+   * If axis is "y", this is the x-distance from the right-most point to the
+   * dimension line.
+   */
+  offset: number
 }
 
-export type SolverOutput = SolvedAnchorDimensions
+export type SolverOutput = CreatedDimension[]
 
 export class DimensionPlacementSolver extends BasePipelineSolver<SolverInput> {
   pipelineDef: PipelineStep<any>[] = []
@@ -22,6 +32,6 @@ export class DimensionPlacementSolver extends BasePipelineSolver<SolverInput> {
 
   override getOutput(): SolverOutput {
     // TODO.
-    return {}
+    return []
   }
 }
